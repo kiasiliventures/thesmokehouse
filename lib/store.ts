@@ -4,6 +4,8 @@ import { CartItem } from "@/lib/types";
 
 interface CartState {
   items: CartItem[];
+  hasHydrated: boolean;
+  setHasHydrated: (value: boolean) => void;
   addItem: (item: Omit<CartItem, "qty">) => void;
   updateQty: (menu_item_id: string, qty: number) => void;
   removeItem: (menu_item_id: string) => void;
@@ -16,6 +18,8 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      hasHydrated: false,
+      setHasHydrated: (value) => set({ hasHydrated: value }),
       addItem: (item) => {
         const existing = get().items.find((i) => i.menu_item_id === item.menu_item_id);
         if (existing) {
@@ -44,7 +48,11 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: "smokehouse-cart",
-      storage: createJSONStorage(() => localStorage)
+      storage: createJSONStorage(() => localStorage),
+      skipHydration: true,
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      }
     }
   )
 );

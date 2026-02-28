@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import { useCartStore } from "@/lib/store";
 import { createOrder } from "@/lib/api";
 import { formatCurrency } from "@/lib/format";
+import { useCartHydration } from "@/lib/use-cart-hydration";
 
 export function CheckoutForm() {
   const router = useRouter();
   const items = useCartStore((s) => s.items);
   const clear = useCartStore((s) => s.clear);
   const total = useCartStore((s) => s.total);
+  const hydrated = useCartHydration();
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -19,7 +21,9 @@ export function CheckoutForm() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const disabled = useMemo(() => items.length === 0 || submitting, [items.length, submitting]);
+  const safeItems = hydrated ? items : [];
+  const safeTotal = hydrated ? total() : 0;
+  const disabled = useMemo(() => !hydrated || safeItems.length === 0 || submitting, [hydrated, safeItems.length, submitting]);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -34,7 +38,7 @@ export function CheckoutForm() {
 
     try {
       const result = await createOrder({
-        items: items.map((item) => ({ menu_item_id: item.menu_item_id, qty: item.qty })),
+        items: safeItems.map((item) => ({ menu_item_id: item.menu_item_id, qty: item.qty })),
         pickup_time: pickupTime,
         name: name.trim(),
         phone: phone.trim(),
@@ -91,9 +95,9 @@ export function CheckoutForm() {
 
       <aside className="h-fit rounded-2xl bg-white p-5 shadow-card lg:sticky lg:top-6">
         <h3 className="text-lg font-bold text-walnut">Order Summary</h3>
-        <p className="mt-1 text-sm text-stone-600">{items.length} line items</p>
+        <p className="mt-1 text-sm text-stone-600">{safeItems.length} line items</p>
         <ul className="mt-3 space-y-2 text-sm text-stone-700">
-          {items.map((item) => (
+          {safeItems.map((item) => (
             <li key={item.menu_item_id} className="flex justify-between gap-4">
               <span>
                 {item.qty}x {item.name}
@@ -104,7 +108,7 @@ export function CheckoutForm() {
         </ul>
         <div className="mt-4 flex items-center justify-between border-t border-[#e1d2c1] pt-3">
           <span className="font-semibold text-walnut">Total</span>
-          <span className="text-xl font-bold text-walnut">{formatCurrency(total())}</span>
+          <span className="text-xl font-bold text-walnut">{formatCurrency(safeTotal)}</span>
         </div>
         <button type="submit" disabled={disabled} className="btn-primary mt-4 w-full rounded-xl px-4 py-3 text-sm font-semibold disabled:opacity-60">
           {submitting ? "Placing Order..." : "Place Order"}

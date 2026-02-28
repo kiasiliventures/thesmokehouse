@@ -34,7 +34,7 @@ async function main() {
       description: "Sticky maple glaze, fall-off-the-bone",
       category: "roasted_meat",
       price: 45000,
-      image_url: "https://images.unsplash.com/photo-1514516345957-556ca7c90a03?auto=format&fit=crop&w=1200&q=80",
+      image_url: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1400&q=80",
       is_available: true
     },
     {
@@ -66,7 +66,7 @@ async function main() {
       description: "Crisp-edged pork belly with black pepper crust",
       category: "roasted_meat",
       price: 39000,
-      image_url: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=1200&q=80",
+      image_url: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=1400&q=80",
       is_available: true
     },
     {

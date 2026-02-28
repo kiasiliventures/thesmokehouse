@@ -1,6 +1,18 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
+import { Bebas_Neue, Manrope } from "next/font/google";
 import "./globals.css";
+
+const headingFont = Bebas_Neue({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-heading"
+});
+
+const bodyFont = Manrope({
+  subsets: ["latin"],
+  variable: "--font-body"
+});
 
 export const metadata: Metadata = {
   title: "The Smoke House",
@@ -21,8 +33,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className={`${headingFont.variable} ${bodyFont.variable}`}>
+      <body className="font-body">
         {children}
         <Script src="/sw-register.js" strategy="afterInteractive" />
       </body>

@@ -3,14 +3,19 @@
 import Link from "next/link";
 import { useCartStore } from "@/lib/store";
 import { formatCurrency } from "@/lib/format";
+import { useCartHydration } from "@/lib/use-cart-hydration";
 
 export function CartView({ showCheckout = true }: { showCheckout?: boolean }) {
   const items = useCartStore((s) => s.items);
   const updateQty = useCartStore((s) => s.updateQty);
   const removeItem = useCartStore((s) => s.removeItem);
   const total = useCartStore((s) => s.total);
+  const hydrated = useCartHydration();
 
-  if (items.length === 0) {
+  const safeItems = hydrated ? items : [];
+  const safeTotal = hydrated ? total() : 0;
+
+  if (safeItems.length === 0) {
     return (
       <div className="mx-auto max-w-3xl rounded-2xl bg-white p-6 text-center shadow-card">
         <h2 className="text-xl font-semibold text-walnut">Your cart is empty</h2>
@@ -24,7 +29,7 @@ export function CartView({ showCheckout = true }: { showCheckout?: boolean }) {
   return (
     <div className="mx-auto grid max-w-5xl gap-4 lg:grid-cols-[2fr_1fr]">
       <div className="space-y-3">
-        {items.map((item) => (
+        {safeItems.map((item) => (
           <div key={item.menu_item_id} className="rounded-2xl bg-white p-4 shadow-card">
             <div className="flex items-start justify-between">
               <div>
@@ -60,7 +65,7 @@ export function CartView({ showCheckout = true }: { showCheckout?: boolean }) {
         <h2 className="text-lg font-bold text-walnut">Summary</h2>
         <div className="mt-3 flex items-center justify-between">
           <span className="text-stone-700">Total</span>
-          <span className="text-xl font-bold text-walnut">{formatCurrency(total())}</span>
+          <span className="text-xl font-bold text-walnut">{formatCurrency(safeTotal)}</span>
         </div>
         {showCheckout ? (
           <Link href="/checkout" className="btn-primary mt-4 block rounded-xl px-4 py-3 text-center text-sm font-semibold">

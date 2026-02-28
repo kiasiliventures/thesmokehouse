@@ -23,7 +23,8 @@ body {
 }
 
 body {
-  font-family: "Segoe UI", "Nunito Sans", "Trebuchet MS", sans-serif;
+  font-family: var(--font-body), "Segoe UI", sans-serif;
+  color: #1f1a17;
 }
 
 .header-wood-strip {
@@ -31,12 +32,18 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(180deg, #5a3825 0%, #4b2e1f 100%);
+  background: linear-gradient(180deg, #65412c 0%, #4b2e1f 100%);
   color: #f4efe6;
+  box-shadow: 0 8px 18px rgba(75, 46, 31, 0.22);
 }
 
 .btn-primary:hover {
-  filter: brightness(1.05);
+  filter: brightness(1.08);
+}
+
+.font-heading {
+  font-family: var(--font-heading), "Impact", sans-serif;
+  letter-spacing: 0.03em;
 }
 
 .btn-ember {
