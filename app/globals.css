@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-cream: #f4efe6;
+  --bg-sand: #f7f1e8;
+  --walnut: #4b2e1f;
+  --ember: #d9733a;
+  --wood: #8a6246;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-cream);
+  color: #2f2219;
+}
+
+body {
+  font-family: "Segoe UI", "Nunito Sans", "Trebuchet MS", sans-serif;
+}
+
+.header-wood-strip {
+  background: linear-gradient(90deg, #8a6246 0%, #a77a58 48%, #8a6246 100%);
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #5a3825 0%, #4b2e1f 100%);
+  color: #f4efe6;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+.btn-ember {
+  background: #d9733a;
+  color: #fff8f2;
+}
+
+input,
+select,
+textarea {
+  border: 1px solid #ccb69f;
+  background: #fffdf8;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid rgba(217, 115, 58, 0.35);
+  outline-offset: 1px;
+}
